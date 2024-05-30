@@ -9,7 +9,7 @@ scope = ["https://spreadsheets.google.com/feeds",
          "https://www.googleapis.com/auth/drive.file",
          "https://www.googleapis.com/auth/drive"]
 
-KEY_FILE = "quiet-cider"
+KEY_FILE = "quiet-cider.json"
 
 creds = ServiceAccountCredentials.from_json_keyfile_name(KEY_FILE, scope)
 
