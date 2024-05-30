@@ -2,7 +2,21 @@
 from datetime import datetime
 import locale
 from oauth2client.service_account import ServiceAccountCredentials
+from selenium import webdriver
 import gspread
+
+driver = webdriver.Chrome()
+
+driver.get("Your file")
+
+driver.execute_script("updateTotals()")
+success_percentage = driver.find_element("id", "scs").text
+version = "your version"
+success_percentage = int(float(success_percentage.split("(")[1].split("%")[0]))
+
+print(success_percentage)
+
+driver.quit()
 
 scope = ["https://spreadsheets.google.com/feeds",
          "https://www.googleapis.com/auth/spreadsheets",
@@ -76,20 +90,20 @@ def insert_content_matching_date(start_row, end_row, date_to_match):
             if row[3] == '' and row[5] == '':
                 print(f"Match found in row {i}. Inserting content.")
                 worksheet.update_cell(i, 2, "4T")
-                worksheet.update_cell(i, 4, "1")
-                worksheet.update_cell(i, 6, "100")
+                worksheet.update_cell(i, 4, version)
+                worksheet.update_cell(i, 6, success_percentage)
                 return True
             print(f"Row {i} with date {date_to_match} does not meet the insertion conditions. Trying next empty row.")
             continue
     print(f"No match found for date {date_to_match}.")
     return False
 
-print(f"Title: {worksheet.title}, ID: {worksheet.id}, URL: {worksheet.url}")
+# print(f"Title: {worksheet.title}, ID: {worksheet.id}, URL: {worksheet.url}")
 
-if insert_content_matching_date(FIRST_START_ROW, FIRST_END_ROW, current_date):
-    print("Content inserted in the first part.")
-else:
-    print("No match found in the first part.")
+# if insert_content_matching_date(FIRST_START_ROW, FIRST_END_ROW, current_date):
+#     print("Content inserted in the first part.")
+# else:
+#     print("No match found in the first part.")
 
 
 if insert_content_matching_date(SECOND_SYART_ROW, SECOND_END_ROW, current_date	):
